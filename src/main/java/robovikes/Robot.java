@@ -8,13 +8,15 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
-import robovikes.subsystems.Arm;
+import robovikes.subsystems.Flywheel;
 
 public class Robot extends TimedRobot {
+
+    public final String cnfg_prfx = "src/main/deploy/configuration/";
+
     private Command m_autonomousCommand;
     
     private RobotContainer m_robotContainer;
-    private Arm new_arm = new Arm();
     
     public Robot(double refreshRate) {
         super(refreshRate);
@@ -23,6 +25,10 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         m_robotContainer = new RobotContainer();
+
+        Flywheel.Config fc = new Flywheel.Config("flywheel/flywheel1.properties");
+        Flywheel fw = new Flywheel(fc);
+        
     }
     
     @Override
