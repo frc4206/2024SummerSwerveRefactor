@@ -12,8 +12,6 @@ import robovikes.subsystems.Flywheel;
 
 public class Robot extends TimedRobot {
 
-    public final String cnfg_prfx = "src/main/deploy/configuration/";
-
     private Command m_autonomousCommand;
     
     private RobotContainer m_robotContainer;
