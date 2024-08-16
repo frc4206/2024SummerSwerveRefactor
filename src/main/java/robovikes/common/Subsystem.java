@@ -11,8 +11,6 @@ public abstract class Subsystem {
     private double _defaultRefreshRate = 0.02d;
     public double refreshRate;
 
-    
-
     public Subsystem() {
         // Default set refresh rate to 20ms
         this.refreshRate = _defaultRefreshRate;

@@ -4,13 +4,14 @@
 
 package robovikes.subsystems;
 
-import static robovikes.resources.Static._CONFIG_DIR;
+import static robovikes.resources.Static.CONFIG_DIR;
 
 import java.io.FileInputStream;
 import java.util.Properties;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import robovikes.common.Subsystem;
+import robovikes.common.PrintableConfig;
 
 /** Add your docs here. */
 public class Flywheel extends Subsystem {
@@ -18,7 +19,7 @@ public class Flywheel extends Subsystem {
 	private RelativeEncoder encdr;
 	private SparkPIDController cntrllr;
 
-	public static final class Config {
+	public static final class Config extends PrintableConfig {
 		public int canID;
         public boolean inverted;
 		public double kp;
@@ -34,7 +35,7 @@ public class Flywheel extends Subsystem {
             try 
             {
                 Properties p = new Properties();
-                p.load(new FileInputStream(_CONFIG_DIR + file));
+                p.load(new FileInputStream(CONFIG_DIR + file));
                 this.canID = Integer.parseInt(p.getProperty("canID"));
 				this.inverted = Boolean.parseBoolean(p.getProperty("inverted"));
 				this.kp = Double.parseDouble(p.getProperty("kp"));
@@ -50,6 +51,9 @@ public class Flywheel extends Subsystem {
                 e.printStackTrace();
                 System.exit(-1);
             }
+			finally {
+				PrintableConfig.print(this);
+			}
         }
     }
 

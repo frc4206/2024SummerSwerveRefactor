@@ -25,7 +25,10 @@ public class Robot extends TimedRobot {
         m_robotContainer = new RobotContainer();
 
         Flywheel.Config fc = new Flywheel.Config("flywheel/flywheel1.properties");
-        Flywheel fw = new Flywheel(fc);
+        // Flywheel fw = new Flywheel(fc);
+
+        Flywheel.Config fc2 = new Flywheel.Config("flywheel/flywheel2.properties");
+        // Flywheel fw2 = new Flywheel(fc2);
         
     }
     
