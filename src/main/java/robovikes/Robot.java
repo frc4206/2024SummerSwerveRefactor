@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer;
 import robovikes.subsystems.Flywheel;
+import robovikes.subsystems.GenericSubsystem;
 
 public class Robot extends TimedRobot {
 
@@ -29,7 +30,8 @@ public class Robot extends TimedRobot {
 
         Flywheel.Config fc2 = new Flywheel.Config("flywheel/flywheel2.properties");
         // Flywheel fw2 = new Flywheel(fc2);
-        
+
+        GenericSubsystem.Config gc = new GenericSubsystem.Config("generic/generic.properties");
     }
     
     @Override
