@@ -10,7 +10,7 @@ public class GenericSubsystem {
         public float f;
         public short s;
         public long l;
-        // public char c;
+        public char c;
         public double d;
         public String str;
         public byte b;

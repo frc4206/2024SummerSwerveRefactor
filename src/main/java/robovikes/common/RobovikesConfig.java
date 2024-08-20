@@ -5,49 +5,29 @@ import static robovikes.resources.Static.CONFIG_DIR;
 import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.util.Properties;
-
 public abstract class RobovikesConfig {
 
-    protected void load(RobovikesConfig c, String filename){
+    protected void load(RobovikesConfig c, String filename) {
         try {
             Properties p = new Properties();
             p.load(new FileInputStream(CONFIG_DIR + filename));
             Field[] fields = c.getClass().getDeclaredFields();
-            for(Field f : fields) {
+            for (Field f : fields) {
                 f.setAccessible(true);
-                switch (f.getType().toString()){
-                    case "null":
-                        break;
-                    case "boolean":
-                        f.setBoolean(c, Boolean.parseBoolean(p.getProperty(f.getName())));
-                        break;
-                    case "byte":
-                        f.setByte(c, Byte.parseByte(p.getProperty(f.getName())));
-                        break;
-                    // case "char":
-                    //     f.setChar(c, p.getProperty(f.getName()).charAt(0));
-                    //     break;
-                    case "short":
-                        f.setShort(c, Short.parseShort(p.getProperty(f.getName())));
-                        break;
-                    case "int":
-                        f.setInt(c, Integer.parseInt(p.getProperty(f.getName())));
-                        break;
-                    case "long":
-                        f.setLong(c, Long.parseLong(p.getProperty(f.getName())));
-                        break;
-                    case "float":
-                        f.setFloat(c, Float.parseFloat(p.getProperty(f.getName())));
-                        break;
-                    case "double":
-                        f.setDouble(c, Double.parseDouble(p.getProperty(f.getName())));
-                        break;
-                    default:
-                        f.set(c, p.getProperty(f.getName()));
-                        break;
+                String s = p.getProperty(f.getName());
+                switch (f.getType().toString()) {
+                    case "boolean" -> f.setBoolean(c, Boolean.parseBoolean(s));
+                    case "byte" -> f.setByte(c, Byte.parseByte(s));
+                    case "char" -> f.setChar(c, s.charAt(0));
+                    case "short" -> f.setShort(c, Short.parseShort(s));
+                    case "int" -> f.setInt(c, Integer.parseInt(s));
+                    case "long" -> f.setLong(c, Long.parseLong(s));
+                    case "float" -> f.setFloat(c, Float.parseFloat(s));
+                    case "double" -> f.setDouble(c, Double.parseDouble(s));
+                    default -> f.set(c, s);
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
