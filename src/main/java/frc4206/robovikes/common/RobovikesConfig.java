@@ -1,6 +1,6 @@
-package robovikes.common;
+package frc4206.robovikes.common;
 
-import static robovikes.resources.Static.CONFIG_DIR;
+import static frc4206.robovikes.resources.Static.CONFIG_DIR;
 
 import java.io.FileInputStream;
 import java.lang.reflect.Field;

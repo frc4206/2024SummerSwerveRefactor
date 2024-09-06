@@ -1,6 +1,6 @@
-package robovikes.subsystems;
+package frc4206.robovikes.subsystems;
 
-import robovikes.common.RobovikesConfig;
+import frc4206.robovikes.common.RobovikesConfig;
 
 public class GenericSubsystem {
 
