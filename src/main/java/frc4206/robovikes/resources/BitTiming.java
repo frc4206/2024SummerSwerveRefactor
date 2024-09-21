@@ -1,4 +1,4 @@
-package frc.robot.resources;
+package frc4206.robovikes.resources;
 
 /** Add your docs here. */
 public abstract class BitTiming {

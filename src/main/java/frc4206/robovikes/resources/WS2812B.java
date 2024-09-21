@@ -1,4 +1,4 @@
-package frc.robot.resources;
+package frc4206.robovikes.resources;
 
 public final class WS2812B extends BitTiming {
     public WS2812B(){
