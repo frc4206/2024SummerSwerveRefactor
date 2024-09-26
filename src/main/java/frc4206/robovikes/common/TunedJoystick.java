@@ -1,101 +1,98 @@
 package frc4206.robovikes.common;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public final class TunedJoystick {
 
-    private ResponseCurveFunction rcf;
-    private double EXPONENT = 1.0;
-    private double DEADZONE = 0.1d;
-    private static final double _DEADZONE_MAX = 0.2d;
-
+    private double deadzone;
     private XboxController cntrllr;
+    private ResponseCurve rc;
 
+    /*
+     * In this design, only exponential reponse curves
+     * are implemented so as to simplify implementation.
+     */
     public static enum ResponseCurve {
-        LINEAR,
-        VERYSOFT,
-        SOFT,
-        QUADRATIC,
-        CUBIC,
-        CIRCULAR // 1 - sqrt(1 - x^(2))
-    }
+        LINEAR(1.0d),
+        VERYSOFT(1.48d),
+        SOFT(1.64d),
+        QUADRATIC(2.0d),
+        CUBIC(3.0d);
 
-    public interface ResponseCurveFunction {
-        double applyCurve(double i);
+        private double exponent;
+
+        private ResponseCurve(double d) {
+            this.exponent = d;
+        }
+
+        /*
+         * It's critical that the output has the same sign
+         * as the input, and even numbered exponents (or most
+         * fractional exponents) do not preserve sign
+         * after their operation.
+         */
+        public double applyCurve(double val) {
+            return val >= 0.0d ? Math.pow(val, exponent) : -Math.pow(val, exponent);
+        }
     }
 
     public TunedJoystick(XboxController c) {
         this.cntrllr = c;
-        this.rcf = this::linear;
-        this.DEADZONE = 0.1d;
+        this.rc = ResponseCurve.LINEAR; // why default to anything except regular?
+        this.deadzone = 0.01d; // default should be pretty small, in Christian's opinion
     }
 
+    /* Epic math that scales one domain to a new domain */
     public static double map(double val, double in_min, double in_max, double out_min, double out_max) {
         return ((val - in_min) * (out_max - out_min) / (in_max - in_min)) + out_min;
     }
 
+    /*
+     * Returns 0 if (absolute value of) input is lower than deadzone
+     * Otherwise, deadzone is the new '0' and scales to the max value (of 1.0)
+     * Also, this implementation uses a square deadzone since using a circular
+     * deadzone requires the x AND y values to calculate vector magnitude, hence x
+     * AND y.
+     */
     public double applyDeadzone(double val) {
-        double dead_zoned = (Math.abs(val) >= DEADZONE ? map(Math.abs(val), DEADZONE, 1.0d, 0.0d, 1.0d) : 0.0d);
+        double dead_zoned = (Math.abs(val) >= deadzone ? map(Math.abs(val), deadzone, 1.0d, 0.0d, 1.0d) : 0.0d);
         return val >= 0.0d ? dead_zoned : -dead_zoned;
     }
 
-    private double linear(double val) {
-        return val;
+    public TunedJoystick useResponseCurve(ResponseCurve rc) {
+        this.rc = rc;
+        return this;
     }
 
-    private double exponential(double val) {
-        return val >= 0.0d ? Math.pow(val, EXPONENT) : -Math.pow(val, EXPONENT);
-    }
-
-    private double quadratic(double val) {
-        return val >= 0.0d ? (val * val) : -(val * val);
-    }
-
-    private double cubic(double val) {
-        return (val * val * val);
-    }
-
-    private void useExponential(double exponent){
-        rcf = this::exponential;
-        this.EXPONENT = exponent;
-    }
-
-    public void useResponseCurve(ResponseCurve rc) {
-        switch (rc) {
-            case VERYSOFT -> useExponential(1.48d);
-            case SOFT -> useExponential(1.64d);
-            case QUADRATIC -> rcf = this::quadratic;
-            case CUBIC -> rcf = this::cubic;
-            default -> rcf = this::linear;
-        }
-    }
-
-    public void setDeadzone(double d) {
+    public TunedJoystick setDeadzone(double d) {
         // Check for negative just in case
-        DEADZONE = Math.abs(d);
+        this.deadzone = Math.abs(d);
+        return this;
     }
 
-    private double applyTune(double i) {
-        // Note that the deadzone must be applied
-        // BEFORE the curve function
-        return rcf.applyCurve(applyDeadzone(i));
+    /*
+     * Note that the deadzone must be applied BEFORE the
+     * reponse curve. This is a critical order of operations,
+     * so it deserves it's own function for scrutiny.
+     */
+    private double tune(double i) {
+        return rc.applyCurve(applyDeadzone(i));
     }
 
     public double getLeftX() {
-        return applyTune(cntrllr.getLeftX());
+        return tune(cntrllr.getLeftX());
     }
 
     public double getLeftY() {
-        return applyTune(cntrllr.getLeftY());
+        return tune(cntrllr.getLeftY());
     }
 
     public double getRightX() {
-        return applyTune(cntrllr.getRightX());
+        return tune(cntrllr.getRightX());
     }
 
     public double getRightY() {
-        return applyTune(cntrllr.getRightY());
+        return tune(cntrllr.getRightY());
     }
 
 }
