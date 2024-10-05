@@ -26,13 +26,14 @@ public final class TunedJoystick {
         }
 
         /*
-         * It's critical that the output has the same sign
-         * as the input, and even numbered exponents (or most
-         * fractional exponents) do not preserve sign
-         * after their operation.
+         * This function assumes that the input is
+         * an absolute value since fractional exponents,
+         * and non-odd integer exponents, do not preserve the
+         * sign of the input. Some fractional exponents are
+         * not reflective.
          */
         public double applyCurve(double val) {
-            return val >= 0.0d ? Math.pow(val, exponent) : -Math.pow(val, exponent);
+            return Math.pow(val, exponent);
         }
     }
 
@@ -48,15 +49,13 @@ public final class TunedJoystick {
     }
 
     /*
-     * Returns 0 if (absolute value of) input is lower than deadzone
+     * Returns 0 if input is lower than deadzone
      * Otherwise, deadzone is the new '0' and scales to the max value (of 1.0)
-     * Also, this implementation uses a square deadzone since using a circular
-     * deadzone requires the x AND y values to calculate vector magnitude, hence x
-     * AND y.
+     * This implementation uses a square deadzone since using a circular
+     * deadzone requires the x AND y values to calculate vector magnitude
      */
     public double applyDeadzone(double val) {
-        double dead_zoned = (Math.abs(val) >= deadzone ? map(Math.abs(val), deadzone, 1.0d, 0.0d, 1.0d) : 0.0d);
-        return val >= 0.0d ? dead_zoned : -dead_zoned;
+        return val >= deadzone ? map(val, deadzone, 1.0d, 0.0d, 1.0d) : 0.0d;
     }
 
     public TunedJoystick useResponseCurve(ResponseCurve rc) {
@@ -71,12 +70,17 @@ public final class TunedJoystick {
     }
 
     /*
+     * The input to the sequence of operations MUST
+     * be the absolute since the deadzone and response curve
+     * functions have to sense of sign to reduce branching,
+     * and thus overall performance.
      * Note that the deadzone must be applied BEFORE the
      * reponse curve. This is a critical order of operations,
      * so it deserves it's own function for scrutiny.
      */
     private double tune(double i) {
-        return rc.applyCurve(applyDeadzone(i));
+        double result = rc.applyCurve(applyDeadzone(Math.abs(i)));
+        return (i >= 0.0d) ? result : result * -1.0d;
     }
 
     public double getLeftX() {

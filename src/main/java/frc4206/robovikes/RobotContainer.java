@@ -27,8 +27,8 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-    private final TunedJoystick tunedJoystick = new TunedJoystick(joystick.getHID())
-            .useResponseCurve(ResponseCurve.SOFT)
+    public final TunedJoystick tunedJoystick = new TunedJoystick(joystick.getHID())
+            .useResponseCurve(ResponseCurve.QUADRATIC)
             .setDeadzone(0.1d);
 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -43,9 +43,7 @@ public class RobotContainer {
     private void configureBindings() {
 
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-tunedJoystick.getLeftY() * MaxSpeed) // Drive forward
-                                                                                                        // with
-                        // negative Y (forward)
+                drivetrain.applyRequest(() -> drive.withVelocityX(-tunedJoystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                         .withVelocityY(-tunedJoystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                         .withRotationalRate(-tunedJoystick.getRightX() * MaxAngularRate) // Drive counterclockwise with
                                                                                          // negative X (left)
