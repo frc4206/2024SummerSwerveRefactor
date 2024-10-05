@@ -11,11 +11,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc4206.robovikes.common.TunedJoystick;
+import frc4206.robovikes.common.TunedJoystick.ResponseCurve;
 import frc4206.robovikes.generated.TunerConstants;
 import frc4206.robovikes.subsystems.CommandSwerveDrivetrain;
 
@@ -27,11 +27,12 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-    public final TunedJoystick tunedJoystick = new TunedJoystick(joystick.getHID());
+    private final TunedJoystick tunedJoystick = new TunedJoystick(joystick.getHID())
+            .useResponseCurve(ResponseCurve.SOFT)
+            .setDeadzone(0.1d);
 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            // .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) //
-            // Add a 10% deadband
+            // .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
 
     // driving in open loop
@@ -49,6 +50,14 @@ public class RobotContainer {
                         .withRotationalRate(-tunedJoystick.getRightX() * MaxAngularRate) // Drive counterclockwise with
                                                                                          // negative X (left)
                 ));
+
+        drivetrain.applyRequest(() -> drive.withVelocityX(-tunedJoystick.getLeftY() * MaxSpeed) // Drive forward
+                                                                                                // with
+                // negative Y (forward)
+                .withVelocityY(-tunedJoystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                .withRotationalRate(-tunedJoystick.getRightX() * MaxAngularRate) // Drive counterclockwise with
+                                                                                 // negative X (left)
+        );
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         joystick.b().whileTrue(drivetrain
