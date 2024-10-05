@@ -7,35 +7,27 @@ package frc4206.robovikes;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc4206.robovikes.subsystems.Flywheel;
-import frc4206.robovikes.subsystems.GenericSubsystem;
 
 public class Robot extends TimedRobot {
+
+    private static final double loop_period = 0.007d; // in seconds
 
     private Command m_autonomousCommand;
     
     private RobotContainer m_robotContainer;
-    
-    public Robot(double refreshRate) {
-        super(refreshRate);
-    }
+
+    public Robot(){
+        super(loop_period);
+    };
     
     @Override
     public void robotInit() {
         m_robotContainer = new RobotContainer();
-
-        Flywheel.Config fc = new Flywheel.Config("flywheel/flywheel1.properties");
-        // Flywheel fw = new Flywheel(fc);
-
-        Flywheel.Config fc2 = new Flywheel.Config("flywheel/flywheel2.properties");
-        // Flywheel fw2 = new Flywheel(fc2);
-
-        GenericSubsystem.Config gc = new GenericSubsystem.Config("generic/generic.properties");
     }
     
     @Override
     public void robotPeriodic() {
-        //CommandScheduler.getInstance().run(); 
+        CommandScheduler.getInstance().run(); 
     }
     
     @Override
