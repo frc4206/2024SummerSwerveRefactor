@@ -1,10 +1,10 @@
 package frc4206.robovikes.subsystems;
 
-import frc4206.robovikes.common.RobovikesConfig;
+import frc4206.robovikes.common.LoadableConfig;
 
 public class GenericSubsystem {
 
-    public static final class Config extends RobovikesConfig {
+    public static final class Config extends LoadableConfig {
         public int i;
         public boolean bool;
         public float f;
@@ -17,7 +17,7 @@ public class GenericSubsystem {
 
         public Config(String filename) {
             super.load(this, filename);
-            RobovikesConfig.print(this);
+            LoadableConfig.print(this);
         }
     }
 

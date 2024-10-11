@@ -6,9 +6,9 @@ import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.util.Properties;
 
-public abstract class RobovikesConfig {
+public abstract class LoadableConfig {
 
-    protected void load(RobovikesConfig c, String filename) {
+    protected void load(LoadableConfig c, String filename) {
         try {
             Properties p = new Properties();
             p.load(new FileInputStream(CONFIG_DIR + filename));
@@ -34,7 +34,7 @@ public abstract class RobovikesConfig {
         }
     }
 
-    public static void print(RobovikesConfig c) {
+    public static void print(LoadableConfig c) {
         StringBuilder result = new StringBuilder();
         String newLine = System.getProperty("line.separator");
 

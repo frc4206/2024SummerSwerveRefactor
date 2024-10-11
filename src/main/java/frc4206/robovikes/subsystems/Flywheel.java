@@ -7,7 +7,7 @@ package frc4206.robovikes.subsystems;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc4206.robovikes.common.Subsystem;
-import frc4206.robovikes.common.RobovikesConfig;
+import frc4206.robovikes.common.LoadableConfig;
 
 /** Add your docs here. */
 public class Flywheel extends Subsystem {
@@ -15,7 +15,7 @@ public class Flywheel extends Subsystem {
 	private RelativeEncoder encdr;
 	private SparkPIDController cntrllr;
 
-	public static final class Config extends RobovikesConfig {
+	public static final class Config extends LoadableConfig {
 		public int canID;
 		public boolean inverted;
 		public double kp;
@@ -30,7 +30,7 @@ public class Flywheel extends Subsystem {
 
 		public Config(String filename) {
 			super.load(this, filename);
-			RobovikesConfig.print(this);
+			LoadableConfig.print(this);
 		}
 	}
 
