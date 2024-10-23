@@ -26,17 +26,19 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class DefaultTalonFX {
     //-----------------------Set Up-----------------------
+
+    DefaultTalonFX.Config cfg;
+
+    public SlotConfig slot1;
+
     //Creates Motor
     public TalonFX motor;
 
     //Creates PID Config
     TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
 
-    //Name of Motor
-    String motor_Name = "Default_Motor_Name";
-
     //Default Test command
-    private InstantCommand defaultCommand = new InstantCommand(() -> System.out.println("Default test command ran on " + motor_Name));
+    private InstantCommand defaultCommand = new InstantCommand(() -> System.out.println("Default test command ran on " + cfg.name));
 
     //Simulation
     private static final double kSimLoopPeriod = 0.005; // 5 ms
@@ -50,40 +52,53 @@ public class DefaultTalonFX {
     private boolean LiveMotionMagicInit = false;
 
     private double desired_Percent = 0;
-    
-    public DefaultTalonFX (int CANid) {
-        motor = new TalonFX(CANid);
-    }
-
-    public DefaultTalonFX (int CANid, String n) {
-        motor = new TalonFX(CANid);
-        motor_Name = n;
-    }
 
     public DefaultTalonFX (int CANid, DefaultTalonFX.Config cfg) {
         motor = new TalonFX(CANid);
         LoadDefaultConfig(cfg);
     }
+
+    public class SlotConfig extends LoadableConfig {
+        public double kp; // proportional
+        public double ki; // integral
+        public double kd; // derivative
+        public double ks; // static feedforward
+        public double kv; // velocity feedforward
+        public double ka; // acceleration feedforward
+
+    }
+
     //Configuration
-    public static final class Config extends RobovikesConfig {
+    public static final class Config extends LoadableConfig {
         public String name;
-		public double kp;
-		public double ki;
-		public double kd;
+        public int canID;
+        // public PID pid;
+        public boolean inverted;
+
+        public double kp; // proportional
+        public double ki; // integral
+        public double kd; // derivative
+
+        // public SlotConfig slotConfig;
 
 		public Config(String filename) {
 			super.load(this, filename);
-			RobovikesConfig.print(this);
+			LoadableConfig.print(this);
 		}
 	}
 
     public final void LoadDefaultConfig(DefaultTalonFX.Config cfg) {
-        motor_Name = cfg.name;
         Set_PID_Slot_0(cfg.kp, cfg.ki, cfg.kd);
     }
 
     //PID Setup
     private double setPoint = 0;
+
+    public void testLoop(){
+        TalonFXConfiguration tc = talonConfigs;
+
+        // for(SlotConfigs slot : tc.Slot0)
+    }
 
     public void Set_PID_Slot_0(double P, double I, double D) {
         talonConfigs.Slot0.kP = P;
@@ -135,12 +150,6 @@ public class DefaultTalonFX {
 
         motor.getConfigurator().apply(talonConfigs);
     }
-    
-    //SetName
-    public void Set_Name(String n) {
-        motor_Name = n;
-    }
-
 
     //-----------------------Motor controls-----------------------
     //Basic controls
@@ -228,9 +237,9 @@ public class DefaultTalonFX {
 
     //-----------------------Smart Dashboard Controls-----------------------
     public void Enable_Smart_Dashboard_Controls() {
-        SmartDashboard.putData(motor_Name + " Log Data", new InstantCommand(() -> Log_Data_To_Smart_Dashboard()));
-        SmartDashboard.putData(motor_Name + " Enable Live Motion Magic", new InstantCommand(() -> Enable_Live_Motion_Magic()));
-        SmartDashboard.putData(motor_Name + " Enable Live PID", new InstantCommand(() -> Enable_Live_PID(true)));
+        SmartDashboard.putData(cfg.name + " Log Data", new InstantCommand(() -> Log_Data_To_Smart_Dashboard()));
+        SmartDashboard.putData(cfg.name + " Enable Live Motion Magic", new InstantCommand(() -> Enable_Live_Motion_Magic()));
+        SmartDashboard.putData(cfg.name + " Enable Live PID", new InstantCommand(() -> Enable_Live_PID(true)));
     }
 
     public void Log_Data_To_Smart_Dashboard() {
@@ -242,9 +251,9 @@ public class DefaultTalonFX {
     }
 
     private void Update_Logged_Data() {
-        SmartDashboard.putNumber(motor_Name + " velocity", motor.getVelocity().getValueAsDouble());
-        SmartDashboard.putNumber(motor_Name + " position", motor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber(motor_Name + " percent", motor.get());
+        SmartDashboard.putNumber(cfg.name + " velocity", motor.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber(cfg.name + " position", motor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber(cfg.name + " percent", motor.get());
     }
 
     public void Update() {
@@ -259,24 +268,24 @@ public class DefaultTalonFX {
     }
 
     public void Enable_Duty_Cycle_Testing() {
-        SmartDashboard.putNumber(motor_Name + " Desired Percent", 0);
-        SmartDashboard.putData(motor_Name + " Set desired persent", new InstantCommand(() -> Set_Live_Percent()));
-        SmartDashboard.putData(motor_Name + " Test desired persent", new InstantCommand(() -> Duty_Cycle_Output(desired_Percent)));
+        SmartDashboard.putNumber(cfg.name + " Desired Percent", 0);
+        SmartDashboard.putData(cfg.name + " Set desired persent", new InstantCommand(() -> Set_Live_Percent()));
+        SmartDashboard.putData(cfg.name + " Test desired persent", new InstantCommand(() -> Duty_Cycle_Output(desired_Percent)));
     }
 
     public void Set_Live_Percent() {
-        desired_Percent = SmartDashboard.getNumber(motor_Name + " Desired Percent", 0);
+        desired_Percent = SmartDashboard.getNumber(cfg.name + " Desired Percent", 0);
     }
 
     //Live PID
     public void Enable_Live_PID(boolean FOC) {
         if (!LivePIDInit) {
-            SmartDashboard.putNumber(motor_Name + " kP", talonConfigs.Slot0.kP);
-            SmartDashboard.putNumber(motor_Name + " kI", talonConfigs.Slot0.kI);
-            SmartDashboard.putNumber(motor_Name + " kD", talonConfigs.Slot0.kD);
-            SmartDashboard.putNumber(motor_Name + " setpoint", setPoint);
+            SmartDashboard.putNumber(cfg.name + " kP", talonConfigs.Slot0.kP);
+            SmartDashboard.putNumber(cfg.name + " kI", talonConfigs.Slot0.kI);
+            SmartDashboard.putNumber(cfg.name + " kD", talonConfigs.Slot0.kD);
+            SmartDashboard.putNumber(cfg.name + " setpoint", setPoint);
 
-            SmartDashboard.putData(motor_Name + " Set PID", new InstantCommand(() -> Set_Live_PID()));
+            SmartDashboard.putData(cfg.name + " Set PID", new InstantCommand(() -> Set_Live_PID()));
 
             if (!FOC) {
                 SmartDashboard.putData("Test PID Position", new InstantCommand(() -> Test_Live_PID_Pos()));
@@ -291,11 +300,11 @@ public class DefaultTalonFX {
 
     public void Set_Live_PID() {
         Set_PID_Slot_0(
-            SmartDashboard.getNumber(motor_Name + " kP", 0),
-            SmartDashboard.getNumber(motor_Name + " kI", 0),
-            SmartDashboard.getNumber(motor_Name + " kD", 0)
+            SmartDashboard.getNumber(cfg.name + " kP", 0),
+            SmartDashboard.getNumber(cfg.name + " kI", 0),
+            SmartDashboard.getNumber(cfg.name + " kD", 0)
         );
-        setPoint = SmartDashboard.getNumber(motor_Name + " setpoint", 1);
+        setPoint = SmartDashboard.getNumber(cfg.name + " setpoint", 1);
     }
 
     private void Test_Live_PID_Pos() {
@@ -317,18 +326,18 @@ public class DefaultTalonFX {
     //Live Motion Magic
     public void Enable_Live_Motion_Magic() {
         if (!LiveMotionMagicInit) {
-            SmartDashboard.putNumber(motor_Name + " kP", talonConfigs.Slot0.kP);
-            SmartDashboard.putNumber(motor_Name + " kI", talonConfigs.Slot0.kI);
-            SmartDashboard.putNumber(motor_Name + " kD", talonConfigs.Slot0.kD);
+            SmartDashboard.putNumber(cfg.name + " kP", talonConfigs.Slot0.kP);
+            SmartDashboard.putNumber(cfg.name + " kI", talonConfigs.Slot0.kI);
+            SmartDashboard.putNumber(cfg.name + " kD", talonConfigs.Slot0.kD);
 
-            SmartDashboard.putNumber(motor_Name + " Crusie Velocity", talonConfigs.MotionMagic.MotionMagicCruiseVelocity);
-            SmartDashboard.putNumber(motor_Name + " Acceleration", talonConfigs.MotionMagic.MotionMagicAcceleration);
-            SmartDashboard.putNumber(motor_Name + " Jerk", talonConfigs.MotionMagic.MotionMagicJerk);
+            SmartDashboard.putNumber(cfg.name + " Crusie Velocity", talonConfigs.MotionMagic.MotionMagicCruiseVelocity);
+            SmartDashboard.putNumber(cfg.name + " Acceleration", talonConfigs.MotionMagic.MotionMagicAcceleration);
+            SmartDashboard.putNumber(cfg.name + " Jerk", talonConfigs.MotionMagic.MotionMagicJerk);
 
-            SmartDashboard.putNumber(motor_Name + " setpoint", setPoint);
+            SmartDashboard.putNumber(cfg.name + " setpoint", setPoint);
 
-            SmartDashboard.putData(motor_Name + " Set PID", new InstantCommand(() -> Set_Live_PID()));
-            SmartDashboard.putData(motor_Name + " Set Motion Magic Values", new InstantCommand(() -> Set_Live_Motion_Magic()));
+            SmartDashboard.putData(cfg.name + " Set PID", new InstantCommand(() -> Set_Live_PID()));
+            SmartDashboard.putData(cfg.name + " Set Motion Magic Values", new InstantCommand(() -> Set_Live_Motion_Magic()));
 
             SmartDashboard.putData("Test Motion Magic Position", new InstantCommand(() -> Motion_Magic_Pos(setPoint, true)));
             SmartDashboard.putData("Test Motion Magic Velocity", new InstantCommand(() -> Motion_Magic_Velo(setPoint, true)));
@@ -341,11 +350,11 @@ public class DefaultTalonFX {
 
     public void Set_Live_Motion_Magic() {
         Motion_Magic_Setup(
-            SmartDashboard.getNumber(motor_Name + " Crusie Velocity", 0),
-            SmartDashboard.getNumber(motor_Name + " Acceleration", 0),
-            SmartDashboard.getNumber(motor_Name + " Jerk", 0)
+            SmartDashboard.getNumber(cfg.name + " Crusie Velocity", 0),
+            SmartDashboard.getNumber(cfg.name + " Acceleration", 0),
+            SmartDashboard.getNumber(cfg.name + " Jerk", 0)
         );
-        setPoint = SmartDashboard.getNumber(motor_Name + " setpoint", 1);
+        setPoint = SmartDashboard.getNumber(cfg.name + " setpoint", 1);
     }
 
     //-----------------------Simulation Support-----------------------

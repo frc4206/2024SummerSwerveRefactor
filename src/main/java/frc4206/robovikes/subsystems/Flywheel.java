@@ -29,8 +29,8 @@ public class Flywheel extends Subsystem {
 		public int allowedError;
 
 		public Config(String filename) {
-			super.load(this, filename);
-			LoadableConfig.print(this);
+			// super.load(this, filename);
+			// LoadableConfig.print(this);
 		}
 	}
 

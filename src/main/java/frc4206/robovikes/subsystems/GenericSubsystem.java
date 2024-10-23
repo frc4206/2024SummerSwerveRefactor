@@ -4,6 +4,15 @@ import frc4206.robovikes.common.LoadableConfig;
 
 public class GenericSubsystem {
 
+    public class Slot extends LoadableConfig {
+        public double kp; // proportional
+        public double ki; // integral
+        public double kd; // derivative
+        public double ks; // static feedforward
+        public double kv; // velocity feedforward
+        public double ka; // acceleration feedforward
+    }
+
     public static final class Config extends LoadableConfig {
         public int i;
         public boolean bool;
@@ -15,9 +24,11 @@ public class GenericSubsystem {
         public String str;
         public byte b;
 
+        public Slot slot1;
+
         public Config(String filename) {
             super.load(this, filename);
-            LoadableConfig.print(this);
+            // LoadableConfig.print(this);
         }
     }
 

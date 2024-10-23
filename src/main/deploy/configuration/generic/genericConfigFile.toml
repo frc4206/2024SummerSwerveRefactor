@@ -1,0 +1,19 @@
+# flywheel 1
+
+i = 100
+bool = false
+f = 20.000
+s = 255
+l = 1000000
+c = 9
+d = 0.0002354
+str = "this is a test string"
+b = 127
+
+[slot1]
+kp = 0.000000625
+ki = 0.000000325
+kd = 0.01
+ks = 1.0
+kv = 3.0
+ka = 4.3

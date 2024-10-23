@@ -4,6 +4,8 @@
 
 package frc4206.robovikes;
 
+import java.security.GeneralSecurityException;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -14,10 +16,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc4206.robovikes.common.DefaultTalonFX;
 import frc4206.robovikes.common.TunedJoystick;
 import frc4206.robovikes.common.TunedJoystick.ResponseCurve;
 import frc4206.robovikes.generated.TunerConstants;
 import frc4206.robovikes.subsystems.CommandSwerveDrivetrain;
+import frc4206.robovikes.subsystems.GenericSubsystem;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
@@ -72,7 +76,10 @@ public class RobotContainer {
     }
 
     public RobotContainer() {
-        configureBindings();
+        // configureBindings();
+
+        // DefaultTalonFX.Config cfg = new DefaultTalonFX.Config("motor1/motor1.properties");
+        GenericSubsystem.Config gsc = new GenericSubsystem.Config("generic/genericConfigFile.toml");
     }
 
     public Command getAutonomousCommand() {
