@@ -11,7 +11,7 @@ str = "this is a test string"
 b = 127
 
 [slot1]
-kp = 0.000000625
+kp = 0.00625
 ki = 0.000000325
 kd = 0.01
 ks = 1.0
