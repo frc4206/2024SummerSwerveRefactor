@@ -17,28 +17,28 @@ import frc4206.robovikes.subsystems.GenericSubsystem;
 
 public abstract class LoadableConfig {
 
-    public interface LoadableConfigFactory{
+    private static final String class_name = "LoadableConfig";
+
+    public class LoadableConfigException extends Exception {
+        public LoadableConfigException(Class<?> c) {
+            super(c.getCanonicalName() + " is not an instance of a " + class_name);
+        }
+    }
+
+    public interface LoadableConfigFactory {
         public LoadableConfig create();
     }
 
-    public LoadableConfig(){};
+    private boolean isLoadableConfig(Class<?> c) {
+        return LoadableConfig.class.isAssignableFrom(c);
+    }
 
     protected void load(LoadableConfig c, String filename) {
-
-        Path source = Paths.get(CONFIG_DIR + filename);
-
-        System.out.println(source);
-
         try {
+            Path source = Paths.get(CONFIG_DIR + filename);
+
             TomlParseResult result = Toml.parse(source);
             result.errors().forEach(error -> System.err.println(error.toString()));
-
-            // result.getTable(null);
-
-            // this.load(c, result);
-
-            // TomlTable tt = result.getTable("slot1");
-            // System.out.println(tt.getDouble("kp"));
 
             Field[] fields = c.getClass().getDeclaredFields();
 
@@ -47,157 +47,74 @@ public abstract class LoadableConfig {
                 String type_name = f.getType().getName();
                 String id = f.getName();
 
-                System.out.println("Trying to parse \"" + type_name + "\", " + id);
-
-                // result.getTable()
-
-                // Object tps = result.get(id);
-
+                /**
+                 * The most common types are checked first, which are 
+                 * probably double, String, and int for FRC
+                 */
                 switch (type_name) {
-                    case "int" -> {
-                        int i = result.getLong(id).intValue();
-                        f.setInt(c, i);
-                        System.out.println(f.getInt(c));
-                    }
-                    // case "boolean" -> {
-                    // boolean b = result.getBoolean(id).booleanValue();
-                    // f.setBoolean(c, b);
-                    // System.out.println(f.getBoolean(c));
-                    // }
-                    // case "char" -> f.setChar(c, s.charAt(0));
-                    // case "short" -> f.setShort(c, Short.parseShort(s));
-                    // case "int" -> f.setInt(c, Integer.parseInt(s));
-                    // case "long" -> f.setLong(c, Long.parseLong(s));
-                    // case "float" -> f.setFloat(c, Float.parseFloat(s));
-                    // case "double" -> f.setDouble(c, Double.parseDouble(s));
+                    case "double" -> f.setDouble(c, result.getDouble(id));
+                    case "java.lang.String" -> f.set(c, result.getString(id));
+                    case "int" -> f.setInt(c, result.getLong(id).intValue());
+                    case "boolean" -> f.setBoolean(c, result.getBoolean(id));
+                    case "char" -> f.setChar(c, result.getString(id).charAt(0));
+                    case "long" -> f.setLong(c, result.getLong(id));
+                    case "float" -> f.setFloat(c, (float) result.getDouble(id).doubleValue());
+                    case "short" -> f.setShort(c, (short) result.getLong(id).intValue());
+                    case "byte" -> f.setByte(c, (byte) result.getLong(id).byteValue());
                     default -> {
-                        Class<? extends LoadableConfig> lc = (Class<? extends LoadableConfig>) Class.forName(type_name);
-                        Constructor<? extends LoadableConfig> csts = lc.getConstructor();
-                        
-                        System.out.println(csts);
-
-                        TomlTable tt = result.getTable(id);
-
-                        Object z = csts.newInstance();
-                        this.loadLC((LoadableConfig) z, tt);
-
-                        this.print((LoadableConfig) z);
-
-                        // Constructor<?>[] constructors = clazz.getConstructors();
-                        // for (Constructor<?> constructor : constructors) {
-                        //     System.out.println("  constructor: " + constructor);
-                        //     Class<?>[] parameterTypes = constructor.getParameterTypes();
-                        //     for (Class<?> parameterType : parameterTypes) {
-                        //         System.out.println("    parameterType: " + parameterType);
-                        //     }
-                        // }
-                        // System.out.println(f.getType());
-                        // Object obj = f.getType().getDeclaredConstructor().newInstance();
-                        // Class<?> clazz = Class.forName(type_name);
-                        // System.out.println(clazz.getName());
-                        // LoadableConfig lc = (LoadableConfig) clazz.getDeclaredConstructor().newInstance();
-                        // lc.create();
-                        // Constructor<? extends LoadableConfig> ctor = (Constructor<? extends LoadableConfig>) clazz.getConstructor();
-                        // Object object = ctor.newInstance(new Object());
-
-                        // if(Class.forName(type_name).isAssignableFrom(c.getClass())){
-                        //     System.out.println(type_name + " is a freakin LoadableConfig");
-                        // }
-
-                        // LoadableConfig cq = (LoadableConfig) Class.forName(type_name).cast(type_name.getClass());
-
-                        // System.out.println("here");
-
-                        // // Constructor<?> ctor = cq.getConstructor(Double.class);
-
-                        // // Object object = ctor.newInstance();
-
-                        // System.out.println(cq.getClass());
-
-                        // TomlTable tt = result.getTable(id);
-                        // this.loadLC((LoadableConfig) object, tt);
-                        // System.out.println("Tried this");
-                        // LoadableConfig lc;
-                        // System.out.println("Broke");
-                        // this.load()
+                        Class<?> lc = Class.forName(type_name);
+                        if (!isLoadableConfig(lc)) {
+                            throw new LoadableConfigException(lc);
+                        } else {
+                            Constructor<? extends LoadableConfig> cnstrctr = (Constructor<? extends LoadableConfig>) lc.getConstructor();
+                            LoadableConfig nlc = cnstrctr.newInstance();
+                            this.loadLC(nlc, result.getTable(id));
+                            LoadableConfig.print(nlc);
+                            f.set(c, nlc);
+                        }
                     }
                 }
             }
 
-            // Long canID = result.getLong("canID");
-
-            // System.out.println(canID);
-
+        } catch (LoadableConfigException e) {
+            e.printStackTrace();
+            System.exit(-1);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        // private <T> load()
-
-        // try {
-        // Properties p = new Properties();
-        // p.load(new FileInputStream(CONFIG_DIR + filename));
-        // Field[] fields = c.getClass().getDeclaredFields();
-        // for (Field f : fields) {
-        // f.setAccessible(true);
-        // String s = p.getProperty(f.getName());
-
-        // System.out.println(s + " is the string " + f.getType().toString());
-
-        // switch (f.getType().toString()) {
-        // case "boolean" -> f.setBoolean(c, Boolean.parseBoolean(s));
-        // case "byte" -> f.setByte(c, Byte.parseByte(s));
-        // case "char" -> f.setChar(c, s.charAt(0));
-        // case "short" -> f.setShort(c, Short.parseShort(s));
-        // case "int" -> f.setInt(c, Integer.parseInt(s));
-        // case "long" -> f.setLong(c, Long.parseLong(s));
-        // case "float" -> f.setFloat(c, Float.parseFloat(s));
-        // case "double" -> f.setDouble(c, Double.parseDouble(s));
-        // default -> System.out.println(f.getType().toString() + " : " + s);
-        // }
-        // }
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // System.exit(-1);
-        // }
     }
 
-    private void loadLC(LoadableConfig lc, TomlTable tt) throws Exception {
-
-        System.out.println("here I am etf " + lc.getClass().getName());
-
-        Field[] fields = lc.getClass().getDeclaredFields();
+    private void loadLC(LoadableConfig c, TomlTable tt) throws Exception {
+        Field[] fields = c.getClass().getDeclaredFields();
 
         for (Field f : fields) {
-            System.out.println("   field is '" + f.getType() + "' " + f.getName());
             f.setAccessible(true);
             String type_name = f.getType().getCanonicalName();
             String id = f.getName();
-
-            System.out.println("Trying to parse \"" + type_name + "\", " + id);
-
-            // Object tps = tt.get(id);
-
             switch (type_name) {
-                case "int" -> {
-                    int i = tt.getLong(id).intValue();
-                    f.setInt(lc, i);
-                    System.out.println(f.getInt(lc));
+                    case "double" -> f.setDouble(c, tt.getDouble(id));
+                    case "java.lang.String" -> f.set(c, tt.getString(id));
+                    case "int" -> f.setInt(c, tt.getLong(id).intValue());
+                    case "boolean" -> f.setBoolean(c, tt.getBoolean(id));
+                    case "char" -> f.setChar(c, tt.getString(id).charAt(0));
+                    case "long" -> f.setLong(c, tt.getLong(id));
+                    case "float" -> f.setFloat(c, (float) tt.getDouble(id).doubleValue());
+                    case "short" -> f.setShort(c, (short) tt.getLong(id).intValue());
+                    case "byte" -> f.setByte(c, (byte) tt.getLong(id).byteValue());
+                    default -> {
+                        Class<?> lc = Class.forName(type_name);
+                        if (!isLoadableConfig(lc)) {
+                            throw new LoadableConfigException(lc);
+                        } else {
+                            Constructor<? extends LoadableConfig> cnstrctr = (Constructor<? extends LoadableConfig>) lc.getConstructor();
+                            LoadableConfig nlc = cnstrctr.newInstance();
+                            this.loadLC(nlc, tt.getTable(id));
+                            LoadableConfig.print(nlc);
+                            f.set(c, nlc);
+                        }
+                    }
                 }
-                case "double" -> {
-                    double d = tt.getDouble(id).doubleValue();
-                    f.setDouble(lc, d);
-                }
-                // case "boolean" -> {
-                // boolean b = tt.getBoolean(id).booleanValue();
-                // f.setBoolean(lc, b);
-                // System.out.println(f.getBoolean(lc));
-                // }
-                default -> {
-                    // load()
-                }
-            }
         }
     }
 
