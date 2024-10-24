@@ -1,0 +1,1 @@
+mklink /D deploy src\main\deploy

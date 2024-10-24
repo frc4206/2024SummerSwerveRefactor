@@ -1,0 +1,21 @@
+# flywheel 1
+
+i = 100
+bool = false
+f = 20.000
+s = 255
+l = 1_123_020
+c = "c"
+d = 0.000_235_4
+str = "this is a test string holerads sdlk"
+b = 0xC
+
+slot2 = { kp = 0.126, ki = 123.2, kd = 123.123, ks = 456.789_9, kv = 3.3333, ka = 9.9999 }
+
+[slot1]
+kp = 0.006_25
+ki = 0.000_000_325
+kd = 0.01
+ks = 1.0
+kv = 3.0
+ka = 4.3
