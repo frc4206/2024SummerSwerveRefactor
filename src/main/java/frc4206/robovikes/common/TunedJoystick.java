@@ -71,7 +71,7 @@ public final class TunedJoystick {
 
     /*
      * Note that the deadzone must be applied BEFORE the
-     * reponse curve. This is a critical order of operations,
+     * response curve. This is a critical order of operations,
      * so it deserves it's own function for scrutiny.
      * Note that the parameter is an absolute value
      * in order to reduce internal branching.
