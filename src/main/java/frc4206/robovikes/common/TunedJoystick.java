@@ -29,8 +29,8 @@ public final class TunedJoystick {
          * This function assumes that the input is
          * an absolute value since fractional exponents,
          * and non-odd integer exponents, do not preserve the
-         * sign of the input. Some fractional exponents are
-         * not reflective.
+         * sign of the input.  That is, not all exponents are 
+         * reflective on both the x and y axis.
          */
         public double applyCurve(double val) {
             return Math.pow(val, exponent);
@@ -40,7 +40,7 @@ public final class TunedJoystick {
     public TunedJoystick(XboxController c) {
         this.cntrllr = c;
         this.rc = ResponseCurve.LINEAR; // why default to anything except regular?
-        this.deadzone = 0.01d; // default should be pretty small, in Christian's opinion
+        this.deadzone = 0.1d; // default should be pretty small, in Christian's opinion
     }
 
     /* Epic math that scales one domain to a new domain */
@@ -49,13 +49,13 @@ public final class TunedJoystick {
     }
 
     /*
-     * Returns 0 if input is lower than deadzone
+     * Returns 0 if input is lower than deadzone.
      * Otherwise, deadzone is the new '0' and scales to the max value (of 1.0)
-     * This implementation uses a square deadzone since using a circular
-     * deadzone requires the x AND y values to calculate vector magnitude
+     * This design implements a square deadzone. A circular deadzone
+     * requires the x AND y values to calculate vector magnitude.
      */
     public double applyDeadzone(double val) {
-        return val >= deadzone ? map(val, deadzone, 1.0d, 0.0d, 1.0d) : 0.0d;
+        return val > deadzone ? map(val, deadzone, 1.0d, 0.0d, 1.0d) : 0.0d;
     }
 
     public TunedJoystick useResponseCurve(ResponseCurve rc) {
@@ -70,13 +70,11 @@ public final class TunedJoystick {
     }
 
     /*
-     * The input to the sequence of operations MUST
-     * be the absolute since the deadzone and response curve
-     * functions have to sense of sign to reduce branching,
-     * and thus overall performance.
      * Note that the deadzone must be applied BEFORE the
      * reponse curve. This is a critical order of operations,
      * so it deserves it's own function for scrutiny.
+     * Note that the parameter is an absolute value
+     * in order to reduce internal branching.
      */
     private double tune(double i) {
         double result = rc.applyCurve(applyDeadzone(Math.abs(i)));
