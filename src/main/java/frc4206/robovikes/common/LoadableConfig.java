@@ -15,16 +15,16 @@ public abstract class LoadableConfig {
 
     /**
      * This custom exception is defined so that
-     * we have a stack trace available when the 
-     * class of the field does not extend the 
-     * LoadableConfig class.  This makes the recursion
+     * we have a stack trace available when the
+     * class of the field does not extend the
+     * LoadableConfig class. This makes the recursion
      * of LoadableConfigs safe.
      */
     public class ExtensionException extends Exception {
         private static final String class_name = LoadableConfig.class.getName();
 
         public ExtensionException(Class<?> c) {
-            super(c.getCanonicalName() + " is not an instance of a " + class_name);
+            super(c.getCanonicalName() + " is not an instance of " + class_name);
         }
 
         protected static boolean isLoadableConfig(Class<?> c) {
@@ -32,11 +32,19 @@ public abstract class LoadableConfig {
         }
     }
 
+    /**
+     * This function is how extensions of this class invoke the
+     * initialization of all of the class fields. It is also
+     * a 'helper' function to the actual recursive load function.
+     */
     protected void load(LoadableConfig c, String filename) {
         try {
             Path source = Paths.get(CONFIG_DIR + filename);
+
+            /* These steps are required and defined by the 'tomlj' library. */
             TomlParseResult result = Toml.parse(source);
             result.errors().forEach(error -> System.err.println(error.toString()));
+
             this.load(c, result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,6 +83,11 @@ public abstract class LoadableConfig {
                     if (!ExtensionException.isLoadableConfig(lc)) {
                         throw new ExtensionException(lc);
                     } else {
+                        /**
+                         * This portion of the code invokes a new instance
+                         * of the config class, calls this function recursively,
+                         * and assigns the field to the newly mapped instance.
+                         */
                         Constructor<? extends LoadableConfig> cnstrctr = (Constructor<? extends LoadableConfig>) lc
                                 .getConstructor();
                         LoadableConfig nlc = cnstrctr.newInstance();
