@@ -1,7 +1,6 @@
 package frc4206.robovikes.subsystems;
 
 import frc4206.robovikes.common.LoadableConfig;
-import frc4206.robovikes.common.LoadableConfig.LoadableConfigFactory;
 
 public class GenericSubsystem {
 
@@ -33,6 +32,7 @@ public class GenericSubsystem {
         public Config(String filename) {
             super.load(this, filename);
             LoadableConfig.print(this);
+            LoadableConfig.print(this.slot1);
         }
     }
 
