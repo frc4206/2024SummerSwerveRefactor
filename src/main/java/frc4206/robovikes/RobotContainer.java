@@ -9,6 +9,7 @@ import java.security.GeneralSecurityException;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -79,7 +80,9 @@ public class RobotContainer {
         // configureBindings();
 
         // DefaultTalonFX.Config cfg = new DefaultTalonFX.Config("motor1/motor1.properties");
-        GenericSubsystem.Config gsc = new GenericSubsystem.Config("generic/genericConfigFile.toml");
+        // GenericSubsystem.Config gsc = new GenericSubsystem.Config("generic/genericConfigFile.toml");
+
+        DefaultTalonFX.Config tlnfx_cfg = new DefaultTalonFX.Config("flywheel/flywheel1.toml");
     }
 
     public Command getAutonomousCommand() {

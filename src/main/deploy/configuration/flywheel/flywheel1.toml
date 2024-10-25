@@ -1,0 +1,23 @@
+
+
+bigNumb = 1_000_000
+smallNumb = 0.000_123_456
+
+name = "flywheel1"
+canID = 8
+inverted = true
+
+[slot0]
+kp = 0.01
+ki = 0.123
+kd = 0.001_987
+
+[slot1]
+kp = 0.123
+ki = 0.0
+kd = 0.0
+
+[slot2]
+kp = 1.123
+ki = 2.0
+kd = 3.0

@@ -4,6 +4,9 @@ import javax.swing.plaf.basic.BasicTreeUI.TreeCancelEditingAction;
 import javax.swing.text.StyleContext.SmallAttributeSet;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.ParentConfiguration;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -29,8 +32,6 @@ public class DefaultTalonFX {
 
     DefaultTalonFX.Config cfg;
 
-    public SlotConfig slot1;
-
     //Creates Motor
     public TalonFX motor;
 
@@ -55,41 +56,51 @@ public class DefaultTalonFX {
 
     public DefaultTalonFX (int CANid, DefaultTalonFX.Config cfg) {
         motor = new TalonFX(CANid);
-        LoadDefaultConfig(cfg);
+
+        setSlot0(cfg.slot0);
+        setSlot1(cfg.slot1);
+        setSlot2(cfg.slot2);
+
+        Set_Request(new DutyCycleOut(CANid));
     }
 
-    public class SlotConfig extends LoadableConfig {
+    public static class BasicSlot extends LoadableConfig {
+        public double kp; // proportional
+        public double ki; // integral
+        public double kd; // derivative
+
+        public BasicSlot(){};
+    }
+
+    public static class Slot extends LoadableConfig {
         public double kp; // proportional
         public double ki; // integral
         public double kd; // derivative
         public double ks; // static feedforward
         public double kv; // velocity feedforward
         public double ka; // acceleration feedforward
-
+    
+        public Slot(){};
     }
 
     //Configuration
     public static final class Config extends LoadableConfig {
         public String name;
         public int canID;
-        // public PID pid;
         public boolean inverted;
 
-        public double kp; // proportional
-        public double ki; // integral
-        public double kd; // derivative
+        public long bigNumb;
+        public double smallNumb;
 
-        // public SlotConfig slotConfig;
+        public BasicSlot slot0;
+        public BasicSlot slot1;
+        public BasicSlot slot2;
 
 		public Config(String filename) {
 			super.load(this, filename);
 			LoadableConfig.print(this);
 		}
 	}
-
-    public final void LoadDefaultConfig(DefaultTalonFX.Config cfg) {
-        Set_PID_Slot_0(cfg.kp, cfg.ki, cfg.kd);
-    }
 
     //PID Setup
     private double setPoint = 0;
@@ -100,12 +111,24 @@ public class DefaultTalonFX {
         // for(SlotConfigs slot : tc.Slot0)
     }
 
-    public void Set_PID_Slot_0(double P, double I, double D) {
-        talonConfigs.Slot0.kP = P;
-        talonConfigs.Slot0.kI = I;
-        talonConfigs.Slot0.kD = D;
-        motor.getConfigurator().apply(talonConfigs);
+    public void setSlot0(BasicSlot bs){
+        talonConfigs.Slot0.kP = bs.kp;
+        talonConfigs.Slot0.kI = bs.ki;
+        talonConfigs.Slot0.kD = bs.kd;
     }
+
+    public void setSlot1(BasicSlot bs){
+        talonConfigs.Slot1.kP = bs.kp;
+        talonConfigs.Slot1.kI = bs.ki;
+        talonConfigs.Slot1.kD = bs.kd;
+    }
+
+    public void setSlot2(BasicSlot bs){
+        talonConfigs.Slot2.kP = bs.kp;
+        talonConfigs.Slot2.kI = bs.ki;
+        talonConfigs.Slot2.kD = bs.kd;
+    }
+
 
     public void Set_PID_Slot(int slot, double P, double I, double D) {
         if (slot == 0) {
@@ -123,6 +146,12 @@ public class DefaultTalonFX {
         }
         motor.getConfigurator().apply(talonConfigs);
     }
+
+    // public <T extends ParentConfiguration> void setSlot(T fxSlot, BasicSlot bs){
+    //     fxSlot.kP = bs.kp;
+    //     fxSlot.kI = bs.ki;
+    //     fxSlot.kD = bs.kd;
+    // }
 
     public void Set_SVA_Slot(int slot, double S, double V, double A) {
         if (slot == 0) {
@@ -299,12 +328,12 @@ public class DefaultTalonFX {
     }
 
     public void Set_Live_PID() {
-        Set_PID_Slot_0(
-            SmartDashboard.getNumber(cfg.name + " kP", 0),
-            SmartDashboard.getNumber(cfg.name + " kI", 0),
-            SmartDashboard.getNumber(cfg.name + " kD", 0)
-        );
-        setPoint = SmartDashboard.getNumber(cfg.name + " setpoint", 1);
+        // Set_PID_Slot_0(
+        //     SmartDashboard.getNumber(cfg.name + " kP", 0),
+        //     SmartDashboard.getNumber(cfg.name + " kI", 0),
+        //     SmartDashboard.getNumber(cfg.name + " kD", 0)
+        // );
+        // setPoint = SmartDashboard.getNumber(cfg.name + " setpoint", 1);
     }
 
     private void Test_Live_PID_Pos() {
