@@ -6,19 +6,23 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.tomlj.Toml;
+import org.tomlj.TomlInvalidTypeException;
+import org.tomlj.TomlParseError;
 import org.tomlj.TomlParseResult;
 import org.tomlj.TomlTable;
 
 public abstract class LoadableConfig {
 
+    private Path path;
+
     /**
-     * This custom exception is defined so that
-     * we have a stack trace available when the
-     * class of the field does not extend the
-     * LoadableConfig class. This makes the recursion
-     * of LoadableConfigs safe.
+     * This custom exception is defined to trap when
+     * the class of the field does not extend the
+     * LoadableConfig class. This makes recursion
+     * of LoadableConfigs more safe.
      */
     public class ExtensionException extends Exception {
         private static final String class_name = LoadableConfig.class.getName();
@@ -33,17 +37,38 @@ public abstract class LoadableConfig {
     }
 
     /**
+     * This custom excpetion is defined to trap when
+     * there is missing content in the configuration file.
+     * This is an elementary mistake that mostly points to
+     * lack of discipline.
+     */
+    public class ContainsException extends Exception {
+        public ContainsException(Field f) {
+            super("'" + f.getName() + "' from "
+                    + f.getDeclaringClass().getName() + " is not found in '"
+                    + path.toString() + "'");
+        }
+    }
+
+    /**
      * This function is how extensions of this class invoke the
      * initialization of all of the class fields. It is also
      * a 'helper' function to the actual recursive load function.
      */
     protected void load(LoadableConfig c, String filename) {
         try {
-            Path source = Paths.get(CONFIG_DIR + filename);
+            this.path = Paths.get(CONFIG_DIR + filename);
 
-            /* These steps are required and defined by the 'tomlj' library. */
-            TomlParseResult result = Toml.parse(source);
-            result.errors().forEach(error -> System.err.println(error.toString()));
+            /**
+             * Issues in the config file point to accidental edits
+             * or to mistakes. Assume catastrophe.
+             */
+            TomlParseResult result = Toml.parse(path);
+            List<TomlParseError> tpr = result.errors();
+            if (tpr.size() > 0) {
+                tpr.forEach(error -> System.err.println(error.toString()));
+                throw new RuntimeException("Encountered issues in " + path.toString());
+            }
 
             this.load(c, result);
         } catch (Exception e) {
@@ -60,13 +85,22 @@ public abstract class LoadableConfig {
             String id = f.getName();
 
             /**
+             * Fields of the class not in the configuration file
+             * point to a careless user. There is no hand-holding
+             * for lack of discipline. Assume the user is stupid.
+             */
+            if (!tt.contains(id)) {
+                throw new ContainsException(f);
+            }
+
+            /**
              * This massive switch case is responsible for assigning
              * to the fields of a LoadableConfig the values
              * found inside the config file, that is, within
              * the *.toml. The default case is unique, as it
              * requires some unique casting and instance creation
              * for a class where the type is only determinable by
-             * the name. The subclass MUST exetend this one.
+             * the name. The subclass MUST extend this one.
              */
             switch (type_name) {
                 case "double" -> f.setDouble(c, tt.getDouble(id));
@@ -100,6 +134,9 @@ public abstract class LoadableConfig {
 
     }
 
+    /**
+     * https://stackoverflow.com/questions/1526826/printing-all-variables-value-from-a-class
+     */
     public static void print(LoadableConfig c) {
         StringBuilder result = new StringBuilder();
         String newLine = System.getProperty("line.separator");

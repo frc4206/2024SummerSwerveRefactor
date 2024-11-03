@@ -80,9 +80,9 @@ public class RobotContainer {
         // configureBindings();
 
         // DefaultTalonFX.Config cfg = new DefaultTalonFX.Config("motor1/motor1.properties");
-        // GenericSubsystem.Config gsc = new GenericSubsystem.Config("generic/genericConfigFile.toml");
+        GenericSubsystem.Config gsc = new GenericSubsystem.Config("generic/genericConfigFile.toml");
 
-        DefaultTalonFX.Config tlnfx_cfg = new DefaultTalonFX.Config("flywheel/flywheel1.toml");
+        // DefaultTalonFX.Config tlnfx_cfg = new DefaultTalonFX.Config("flywheel/flywheel1.toml");
     }
 
     public Command getAutonomousCommand() {
