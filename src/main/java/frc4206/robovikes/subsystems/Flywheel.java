@@ -7,7 +7,7 @@ package frc4206.robovikes.subsystems;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc4206.robovikes.common.Subsystem;
-import frc4206.robovikes.common.LoadableConfig;
+import util.levodex.common.LoadableConfig;
 
 /** Add your docs here. */
 public class Flywheel extends Subsystem {

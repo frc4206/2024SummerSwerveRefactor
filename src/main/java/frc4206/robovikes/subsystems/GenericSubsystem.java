@@ -1,6 +1,6 @@
 package frc4206.robovikes.subsystems;
 
-import frc4206.robovikes.common.LoadableConfig;
+import util.levodex.common.LoadableConfig;
 
 public class GenericSubsystem {
 

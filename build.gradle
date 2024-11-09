@@ -8,6 +8,18 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/frc4206/levodex")
+        credentials {
+            // username = project.findProperty("gpr.user") ?: System.getenv("cmoliverio")
+            // password = project.findProperty("gpr.key") ?:
+            username = "cmoliverio"
+            password = ""// put token here
+        }
+   }
+}
+
 def ROBOT_MAIN_CLASS = "frc4206.robovikes.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
@@ -71,7 +83,9 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // include tomlj to parse TOMLs
-    implementation 'org.tomlj:tomlj:1.1.1'
+    // implementation 'org.tomlj:tomlj:1.1.1'
+
+    implementation 'util.levodex:levodex:unspecified'
 }
 
 test {
