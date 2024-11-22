@@ -1,26 +1,19 @@
-An h1 header
-============
 
-> [!NOTE]
-> This is a freaking note
+battleaid-example documentation
+===============================
 
-> [!IMPORTANT]
-> This is freaking important please read yo
+.. note::
+   This is note text. Use a note for information you want the user to
+   pay particular attention to.
 
-> [!NOTE]  
-> Highlights information that users should take into account, even when skimming.
+.. important::
+   This is freaking imporatnt
 
-> [!TIP]
-> Optional information to help a user be more successful.
+.. hint::
+   This is freaking imporatnt
 
-> [!IMPORTANT]  
-> Crucial information necessary for users to succeed.
-
-> [!WARNING]  
-> Critical content demanding immediate user attention due to potential risks.
-
-> [!CAUTION]
-> Negative potential consequences of an action.
+.. warning::
+   This is freaking imporatnt
 
 Paragraphs are separated by a blank line.
 
