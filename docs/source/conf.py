@@ -6,34 +6,45 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'battleaid-example'
+project = ""
 copyright = '2024, Christian Oliverio'
 author = 'Christian Oliverio'
-release = '0.1.0'
+# release = '0.1.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx.ext.autodoc'    
+    "sphinx.ext.autodoc",
+    "myst_parser",
+    "sphinx_inline_tabs"
 ]
+
+sphinx_tabs_valid_builders = ['linkcheck']
+
+# the COLOR for our team is HEX: #041589 or HEX: #001489
 
 source_suffix = ['.rst', '.md']
 
 templates_path = ['_templates']
 exclude_patterns = []
 
-def setup(app):
-    app.add_css_file("css/theme_ctre.css")
+html_favicon = "ico/robovikes.ico"
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'furo'
-html_title = "this is my test title"
+html_title = ""
 html_static_path = ['_static']
+
+
+html_css_files = [
+    "theme_robovikes.css"
+]
 
 html_theme_options = {
     "light_logo": "images/robovikes-light.png",
     "dark_logo": "images/robovikes-dark.png",
+    "sidebar_hide_name": True,
 }

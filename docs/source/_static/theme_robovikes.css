@@ -1,19 +1,73 @@
 /* Hide the brand title */
-.sidebar-brand-text {
-    display: none;
+
+
+/* Variables for colors */
+:root {
+    --blue: #031db0;
+    --background-color: #eaeef3;
+}
+[data-theme="dark"] {
+    --blue: #4184ff;
+    --background-color: #4184ff;
 }
 
-/* Fix light theme */
+
+/* Logo settings */
 .sidebar-logo {
-    background-color: #0057c9;
-    border-radius: 10px;
+    background-color: var(--background-color);
+    border-radius: 15px;
+}
+[data-theme="dark"] .sidebar-logo {
+    background-color: var(--background-color);
 }
 
-/* Make code blocks orange */
-span.pre {
-    color: orange;
-}
 
+/* Set page width */
 .content {
-    width: 53em;
+    width: 55em;
+}
+
+
+/* Used to break sections */
+hr {
+    border: 1px solid var(--blue);
+    opacity: .5;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+/* Change header font sizes */
+h1 {
+    font-size: 2.25rem;
+}
+h2 {
+    font-size: 1.5rem;
+}
+h3 {
+    font-size: 1.25rem;
+}
+h4 {
+    font-size: 1.10rem;
+}
+
+
+/* reduce font sizes */
+body {
+    font-size: 0.925rem; /* Adjust to your desired size */
+}
+
+/* Optional: Reduce the font size for paragraphs */
+p {
+    font-size: 0.925rem;  /* Same as body or adjust as needed */
+}
+
+/* Optional: Reduce the size for lists (ul, ol, li) */
+ul, ol, li {
+    font-size: 0.925rem;  /* Same size or adjust */
+}
+
+/* Optional: Modify blockquote font size */
+blockquote {
+    font-size: 0.925rem;
 }
