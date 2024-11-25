@@ -38,9 +38,12 @@ html_theme = 'furo'
 html_title = ""
 html_static_path = ['_static']
 
-
 html_css_files = [
     "theme_robovikes.css"
+]
+
+html_js_files = [
+    "set_dark_mode.js",
 ]
 
 html_theme_options = {
