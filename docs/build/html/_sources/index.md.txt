@@ -7,7 +7,7 @@
 
 Welcome to the official repository and wiki for **battleaid**! This project has two main purposes:
 
-1. Guide users about how to use **battleaid** and it's features, and 
+1. Guide users about how to use _battleaid_ and it's features, and 
 2. Provide a centralized knowledge base for the RoboVikes software team.  
 
 Other teams are invited to learn from, contribute to, or provide feedback to this project.  
@@ -24,7 +24,7 @@ In October of 1571, Christendom faced destruction at the hands of the invading O
 
 Against overwhelming odds, the Holy League emerged victorious, shattering the perceived invincibility of the Ottomans.  Pope Pius V, attributing the victory to the Virgin Mary's intercession, instituted the feast day "Our Lady of Victory" in thanksgiving.
 
-**battleaid** is dedicated to Our Lady of Victory.
+_battleaid_ is dedicated to Our Lady of Victory.
 
 ```
 O Victorious Lady! Thou who has ever such powerful influence with thy Divine Son, 
@@ -43,5 +43,14 @@ Amen.
 :caption: How to use Battleaid
 :hidden:
 
+getting-started/before-you-begin.md
 getting-started/quick-start.md
+```
+
+```{toctree}
+:maxdepth: 3
+:caption: Features
+:hidden:
+
+features/tuned-joystick.md
 ```

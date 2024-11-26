@@ -6,17 +6,18 @@
     --blue: #031db0;
     --background-color: #eaeef3;
 }
+
 [data-theme="dark"] {
-    --blue: #4184ff;
+    --blue: #366aca;
     --background-color: #4184ff;
 }
-
 
 /* Logo settings */
 .sidebar-logo {
     background-color: var(--background-color);
     border-radius: 15px;
 }
+
 [data-theme="dark"] .sidebar-logo {
     background-color: var(--background-color);
 }
@@ -24,7 +25,7 @@
 
 /* Set page width */
 .content {
-    width: 55em;
+    width: 60em;
 }
 
 
@@ -41,12 +42,15 @@ hr {
 h1 {
     font-size: 2.25rem;
 }
+
 h2 {
     font-size: 1.5rem;
 }
+
 h3 {
     font-size: 1.25rem;
 }
+
 h4 {
     font-size: 1.10rem;
 }
@@ -54,17 +58,22 @@ h4 {
 
 /* reduce font sizes */
 body {
-    font-size: 0.925rem; /* Adjust to your desired size */
+    font-size: 0.925rem;
+    /* Adjust to your desired size */
 }
 
 /* Optional: Reduce the font size for paragraphs */
 p {
-    font-size: 0.925rem;  /* Same as body or adjust as needed */
+    font-size: 0.925rem;
+    /* Same as body or adjust as needed */
 }
 
 /* Optional: Reduce the size for lists (ul, ol, li) */
-ul, ol, li {
-    font-size: 0.925rem;  /* Same size or adjust */
+ul,
+ol,
+li {
+    font-size: 0.925rem;
+    /* Same size or adjust */
 }
 
 /* Optional: Modify blockquote font size */

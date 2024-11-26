@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="battleaid" href="../index.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Tuned Joystick" href="../features/tuned-joystick.html" /><link rel="prev" title="Before You Begin" href="before-you-begin.html" />
 
     <link rel="shortcut icon" href="../_static/robovikes.ico"/><!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>Quick Start</title>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=302659d7" />
-    <link rel="stylesheet" type="text/css" href="../_static/theme_robovikes.css?v=66ab0d3f" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme_robovikes.css?v=35bd9858" />
     
     
 
@@ -205,7 +205,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">How to use Battleaid</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="before-you-begin.html">Before You Begin</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Quick Start</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../features/tuned-joystick.html">Tuned Joystick</a></li>
 </ul>
 
 </div>
@@ -249,19 +254,19 @@
           <section id="quick-start">
 <h1>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h1>
 <hr>
-<p><strong>battleaid</strong> is not published on Maven as a public package (yet), and is only as a <em>GitHub package</em>.  This requires more setup by the user, but the result functions exactly as any other remote resource.</p>
+<p><em>battleaid</em> is not published on Maven as a public package (yet), and is only available as a <em>GitHub package</em>.  This requires more setup by the user, but the result functions exactly as any other remote resource.</p>
 <hr>
 <section id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Link to this heading">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Generate a GitHub access token (classic) with <code class="docutils literal notranslate"><span class="pre">read:packages</span></code> permission and copy it your clipboard.  <a class="reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic">GitHub has a tutorial for this</a>.</p></li>
+<li><p>Generate a GitHub access token (classic) with <code class="docutils literal notranslate"><span class="pre">read:packages</span></code> permission and copy it your clipboard.  <a class="reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic">GitHub has a tutorial</a>.</p></li>
 </ol>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Keep your token somewhere safe and easily accessible!  If you decide to use a different computer you will need to repeat these steps!</p>
+<p>Keep your token somewhere safe and easily accessible!  If you decide to use a different computer or move to a different project you will need to repeat these steps!</p>
 </div>
 <ol class="arabic simple" start="2">
-<li><p>Create the file <code class="docutils literal notranslate"><span class="pre">gradle.properties</span></code> in the root directory of your FRC robot project and enter the following into the file (<em>without</em> the angles):</p></li>
+<li><p>Create the file <code class="docutils literal notranslate"><span class="pre">gradle.properties</span></code> in the root directory of your FRC robot project and add your username and token (<em>without</em> &lt; or &gt;):</p></li>
 </ol>
 <div class="highlight-properties notranslate"><div class="highlight"><pre><span></span><span class="na">github.username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&lt;your_github_username_here&gt;</span>
 <span class="na">github.token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&lt;your_token_here&gt;</span>
@@ -270,44 +275,47 @@
 <ol class="arabic simple" start="3">
 <li><p>If it does not already exist, create the file <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code> in your project root directory.  Add <code class="docutils literal notranslate"><span class="pre">gradle.properties</span></code> to the list of entries.</p></li>
 </ol>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">gradle.properties</span></code> is pushed to the remote repository containing your token (which is basically a password), your token will be publicly exposed.  This puts your account at risk.</p>
 </div>
 <ol class="arabic simple" start="4">
 <li><p>In your FRC robot project in WPILib, add this to the top of your <code class="docutils literal notranslate"><span class="pre">build.gradle</span></code> file:</p></li>
 </ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>repositories {
-    maven {
-        url = uri(&quot;https://maven.pkg.github.com/frc4206/battleaid&quot;)
-        credentials {
-            username = project.findProperty(&quot;github.username&quot;) ?: System.getenv(&quot;GITHUB_USERNAME&quot;)
-            password = project.findProperty(&quot;github.token&quot;) ?: System.getenv(&quot;GITHUB_TOKEN&quot;)
-        }
-    }
-}
-</pre></div>
-</div>
-<ol class="arabic simple" start="5">
-<li><p>Add the following to your list of dependencies:</p></li>
-</ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dependencies</span> <span class="p">{</span>
-    <span class="o">...</span>
-    <span class="n">implementation</span> <span class="s1">&#39;org.team4206:battleaid:&lt;version_number&gt;&#39;</span>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">repositories</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">maven</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="p">(</span><span class="s">&quot;https://maven.pkg.github.com/frc4206/battleaid&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">credentials</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">project</span><span class="p">.</span><span class="na">findProperty</span><span class="p">(</span><span class="s">&quot;github.username&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="p">:</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">getenv</span><span class="p">(</span><span class="s">&quot;GITHUB_USERNAME&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">project</span><span class="p">.</span><span class="na">findProperty</span><span class="p">(</span><span class="s">&quot;github.token&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="p">:</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">getenv</span><span class="p">(</span><span class="s">&quot;GITHUB_TOKEN&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<ol class="arabic simple" start="6">
-<li><p>In your terminal, run <code class="docutils literal notranslate"><span class="pre">./gradlew</span> <span class="pre">build</span></code>.</p></li>
+<ol class="arabic simple" start="5">
+<li><p>Add <em>battleaid</em> to your list of dependencies:</p></li>
 </ol>
-<blockquote>
-<div><p>[!TIP]
-If the build is successful but you still see squiggly red errors in your code, you may need to refresh the Java Lanaguage Server in order for <strong>battleaid</strong> to be visible:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dependencies</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="n">implementation</span> <span class="s1">&#39;org.team4206:battleaid:&lt;version_number&gt;&#39;</span> <span class="c1"># e.g. 0.1.0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Don’t know what version number to use?  The <a class="reference external" href="https://github.com/frc4206/battleaid/releases">releases are on GitHub</a>.</p>
+<ol class="arabic simple" start="6">
+<li><p>Open a terminal and run <code class="docutils literal notranslate"><span class="pre">./gradlew</span> <span class="pre">build</span></code>.  This will download the package.</p></li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If the build is successful but you still see squiggly red errors in your code, you may need to refresh the Java Lanaguage Server in order for <em>battleaid</em> to be visible:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Cntrl</span></code> + <code class="docutils literal notranslate"><span class="pre">Shft</span></code> + <code class="docutils literal notranslate"><span class="pre">P</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&gt;Java:</span> <span class="pre">Clean</span> <span class="pre">Java</span> <span class="pre">Language</span> <span class="pre">Server</span> <span class="pre">Workspace</span></code></p></li>
 </ul>
-</div></blockquote>
+</div>
+<hr>
+<p>If all of the above steps are performed correctly, <em>battleaid</em> will be listed as an external dependency in the <code class="docutils literal notranslate"><span class="pre">Java</span> <span class="pre">Projects</span></code> primary sidebar view container.</p>
 </section>
 </section>
 
@@ -316,15 +324,23 @@ If the build is successful but you still see squiggly red errors in your code, y
       <footer>
         
         <div class="related-pages">
-          
-          <a class="prev-page" href="../index.html">
+          <a class="next-page" href="../features/tuned-joystick.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Tuned Joystick</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="before-you-begin.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">Before You Begin</div>
                 
               </div>
             </a>
@@ -376,6 +392,5 @@ If the build is successful but you still see squiggly red errors in your code, y
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=5fa4622c"></script>
     <script src="../_static/tabs.js?v=3ee01567"></script>
-    <script src="../_static/set_dark_mode.js?v=833fb5b7"></script>
     </body>
 </html>

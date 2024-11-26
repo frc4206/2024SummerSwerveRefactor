@@ -42,10 +42,6 @@ html_css_files = [
     "theme_robovikes.css"
 ]
 
-html_js_files = [
-    "set_dark_mode.js",
-]
-
 html_theme_options = {
     "light_logo": "images/robovikes-light.png",
     "dark_logo": "images/robovikes-dark.png",
