@@ -22,13 +22,13 @@ Battle is not for the faint of heart, and neither is **battleaid**.
 
 While this project hopes to provide valuable learning opportunities, beginner programmers may find some topics challenging.  If you're just starting your software development journey, this project might not be the best resource for you.  And that's ok!  Software development is difficult, and the learning curve is steep.  If you're a highschool kid that wants to learn software, you've got your whole life ahead of you to do so, so don't rush it!
 
-If you're a beginner and _still_ think you're up for this, <u>you have been warned</u>.  You _will_ encounter difficulties that _battleaid_ will not solve for you.  Expect road bumps.  Don't blame _battleaid_ if you don't understand something.
+If you're a beginner and _still_ think you're up for this, <u>you have been warned</u>.  You _will_ encounter difficulties that _battleaid_ will not solve for you.  Expect road bumps.  Don't blame _battleaid_ (or its creator) if you don't understand something.
 
 With this in mind, note that these docs will only hold your hand as much as is required.
 
 <hr>
 
-## What to Expect, and Assumptions
+## Assumptions
 
 Users are expected to be familiar with the following:
 

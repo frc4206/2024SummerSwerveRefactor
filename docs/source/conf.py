@@ -22,8 +22,6 @@ extensions = [
 
 sphinx_tabs_valid_builders = ['linkcheck']
 
-# the COLOR for our team is HEX: #041589 or HEX: #001489
-
 source_suffix = ['.rst', '.md']
 
 templates_path = ['_templates']
@@ -47,3 +45,6 @@ html_theme_options = {
     "dark_logo": "images/robovikes-dark.png",
     "sidebar_hide_name": True,
 }
+
+# enables latex support 
+mathjax_path = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'

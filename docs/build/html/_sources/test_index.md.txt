@@ -48,9 +48,9 @@ getting-started/quick-start.md
 ```
 
 ```{toctree}
-:maxdepth: 3
+:maxdepth: 6
 :caption: Features
 :hidden:
 
-features/tuned-joystick.md
+features/tuned-joystick/tuned-joystick.md
 ```

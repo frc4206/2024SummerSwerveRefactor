@@ -1,4 +1,9 @@
 {
     "java.format.settings.url": "eclipse-formatter.xml",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "cSpell.words": [
+        "deadzone",
+        "Deadzones"
+    ],
+    "iis.configDir": ""
 }
