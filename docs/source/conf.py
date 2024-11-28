@@ -46,5 +46,7 @@ html_theme_options = {
     "sidebar_hide_name": True,
 }
 
+highlight_options = {"linenothreshold": 1}
+
 # enables latex support 
 mathjax_path = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'

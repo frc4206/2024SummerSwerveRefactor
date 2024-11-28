@@ -3,7 +3,7 @@
 
 <hr>
 
-_battleaid_ is not published on Maven as a public package (yet), and is only available as a _GitHub package_.  This requires more setup by the user, but the result functions exactly as any other remote resource.
+Battleaid is not published on Maven as a public package (yet), and is only available as a _GitHub package_.  This requires more setup by the user, but the result functions exactly as any other remote resource.
 
 <hr>
 
@@ -39,7 +39,7 @@ repositories {
     }
 }
 ```
-5. Add _battleaid_ to your list of dependencies:
+5. Add Battleaid to your list of dependencies:
 ```
 dependencies {
     ...
@@ -52,11 +52,11 @@ Don't know what version number to use?  The [releases are on GitHub](https://git
 6. Open a terminal and run `./gradlew build`.  This will download the package.
 
 ```{tip}
-If the build is successful but you still see squiggly red errors in your code, you may need to refresh the Java Lanaguage Server in order for _battleaid_ to be visible:
+If the build is successful but you still see squiggly red errors in your code, you may need to refresh the Java Lanaguage Server in order for Battleaid to be visible:
 - `Cntrl` + `Shft` + `P`
 - `>Java: Clean Java Language Server Workspace`
 ```
 
 <hr>
 
-If all of the above steps are performed correctly, _battleaid_ will be listed as an external dependency in the `Java Projects` primary sidebar view container.
+If all of the above steps are performed correctly, Battleaid will be listed as an external dependency in the `Java Projects` primary sidebar view container.
