@@ -17,7 +17,8 @@ author = 'Christian Oliverio'
 extensions = [
     "sphinx.ext.autodoc",
     "myst_parser",
-    "sphinx_inline_tabs"
+    "sphinx_inline_tabs",
+    "sphinx.ext.githubpages"
 ]
 
 sphinx_tabs_valid_builders = ['linkcheck']
