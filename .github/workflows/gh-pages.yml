@@ -18,12 +18,12 @@ jobs:
           pip install sphinx furo myst_parser sphinx_inline_tabs
       - name: Sphinx build
         run: |
-          sphinx-build -M html ./pages/source _docs
+          sphinx-build -M html ./pages/source docs
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           publish_branch: main
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _build/
+          publish_dir: docs
           force_orphan: true
