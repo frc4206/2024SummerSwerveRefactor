@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-python@v5
       - name: Install dependencies
         run: |
-          pip install sphinx furo myst_parser
+          pip install sphinx furo myst_parser sphinx_inline_tabs
       - name: Sphinx build
         run: |
           sphinx-build -M html ./pages/source _docs
