@@ -19,11 +19,13 @@ jobs:
       - name: Sphinx build
         run: |
           sphinx-build -M html ./pages/source docs
+          mv docs/html/* docs
+          rm docs/html -rf
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/html
+          publish_dir: docs
           force_orphan: true
