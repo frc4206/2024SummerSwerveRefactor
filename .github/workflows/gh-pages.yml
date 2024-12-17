@@ -42,9 +42,10 @@ jobs:
     #       publish_dir: docs/html
     #       force_orphan: true
 
+    # builds docs but ignores compilation step
       - name: Java Docs build
         run: |
-          ./gradlew javadoc
+          ./gradlew javadoc -x compileJava 
 
     # Upload built documentation as an artifact for deployment
       - name: Upload GitHub Pages artifact
