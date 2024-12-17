@@ -15,6 +15,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
 
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+
+      - name: Install Gradle (latest version)
+        uses: gradle/wrapper-validation-action@v1
+        with:
+          gradle-version: 'latest'
+
       - name: Install dependencies
         run: |
           pip install sphinx furo myst_parser sphinx_inline_tabs
@@ -30,6 +40,10 @@ jobs:
     #       github_token: ${{ secrets.GITHUB_TOKEN }}
     #       publish_dir: docs/html
     #       force_orphan: true
+
+      - name: Java Docs build
+        run: |
+          ./gradlew javadoc
 
     # Upload built documentation as an artifact for deployment
       - name: Upload GitHub Pages artifact

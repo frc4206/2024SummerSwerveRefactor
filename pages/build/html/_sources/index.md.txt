@@ -59,5 +59,8 @@ topics/precision-control/precision-control.md
 :caption: Documentation
 :hidden:
 
-javadoc/index.md
+<a href="./javadoc/index.html">Java API</a>
+
 ```
+<!-- javadoc/index.md -->
+<!-- ``` -->

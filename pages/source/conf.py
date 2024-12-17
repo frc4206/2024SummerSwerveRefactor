@@ -9,7 +9,7 @@
 project = ""
 copyright = '2024, Christian Oliverio'
 author = 'Christian Oliverio'
-# release = '0.1.0'
+release = '0.1.4'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -34,7 +34,7 @@ html_favicon = "ico/robovikes.ico"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'furo'
-html_title = ""
+html_title = "test title"
 html_static_path = ['_static']
 
 html_css_files = [
@@ -44,7 +44,7 @@ html_css_files = [
 html_theme_options = {
     "light_logo": "images/robovikes-light.png",
     "dark_logo": "images/robovikes-dark.png",
-    "sidebar_hide_name": True,
+    # "sidebar_hide_name": False,
 }
 
 highlight_options = {"linenothreshold": 1}
