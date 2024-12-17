@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
+          distribution: 'zulu'
 
       - name: Install Gradle (latest version)
         uses: gradle/wrapper-validation-action@v1
