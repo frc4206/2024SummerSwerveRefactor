@@ -33,14 +33,6 @@ jobs:
       - name: Sphinx build
         run: |
           sphinx-build -M html ./pages/source docs
-    #   - name: Deploy to GitHub Pages
-    #     uses: peaceiris/actions-gh-pages@v3
-    #     if: ${{ github.ref == 'refs/heads/main' }}
-    #     with:
-    #       publish_branch: gh-pages
-    #       github_token: ${{ secrets.GITHUB_TOKEN }}
-    #       publish_dir: docs/html
-    #       force_orphan: true
 
     # builds docs but ignores compilation step
       - name: Java Docs build
