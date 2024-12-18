@@ -5,6 +5,22 @@
 
 ## Introduction
 
+<table class="table" style="margin-left: auto; margin-right: auto; table-layout: auto;">
+  <tr>
+    <td style="padding-right: 30px;">
+
+| Curve     |
+|-----------|
+| 🟥 {math}`x^1` |
+| 🟩 {math}`x^{1.48}` |
+| 🟪 {math}`x^{1.64}` |
+| 🟦 {math}`x^2` |    
+| ⬛ {math}`x^3` |    
+</td>
+  </tr>
+</table>
+
+
 Welcome to the official repository and wiki for **Battleaid**! This project has two main purposes:
 
 1. Provide a centralized knowledge base for the RoboVikes software team, and  
