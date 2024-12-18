@@ -1,5 +1,5 @@
 
-name: make github pages
+name: publish-pages
 
 on: workflow_dispatch
 
