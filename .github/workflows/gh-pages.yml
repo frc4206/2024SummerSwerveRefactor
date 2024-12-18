@@ -1,0 +1,10 @@
+name: publish-pages
+
+on: workflow_dispatch
+
+jobs: 
+  empty:
+    runs-on: ubuntu-latest
+    steps:
+      - name: empty
+        run: |
